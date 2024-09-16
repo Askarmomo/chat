@@ -4,11 +4,16 @@ import MessageContainer from '../components/MessageContainer'
 import SideBar from '../components/SideBar'
 
 const HomePage = () => {
+
+    
+
     return (
         <>
             <Header />
-            <SideBar />
-            <MessageContainer />
+            <div className=' flex sm:space-x-[260px]'>
+                <SideBar />
+                <MessageContainer />
+            </div>
         </>
     )
 }

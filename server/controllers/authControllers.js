@@ -1,6 +1,7 @@
 import User from "../models/authModel.js"
 import bcrypt from "bcrypt"
 import { generateTokenAndSetCookie } from "../utils/generateTokenAndSetCookie.js"
+import { v2 as cloudinary } from 'cloudinary';
 
 
 
@@ -49,6 +50,7 @@ export const singUp = async (req, res) => {
         if (createUser) {
             return res.status(200).json(createUser)
         }
+
     } catch (error) {
         console.log('Error in singup', error.message);
         return res.status(500).json({ error: "Internal server error" })
@@ -74,7 +76,7 @@ export const logIn = async (req, res) => {
         }
 
         generateTokenAndSetCookie(user._id, res)
-        res.status(200).json({ message: "Success", user })
+        res.status(200).json(user)
 
     } catch (error) {
         console.log("Error in logIn", error);
@@ -86,11 +88,51 @@ export const logIn = async (req, res) => {
 export const logOut = async (req, res) => {
 
     try {
-        res.cookie("jwt", "", { maxAge: 0 })
+        res.cookie("jwt","", { maxAge: 0 })
         res.status(200).json({ message: "LogOut Succrssfully" })
     } catch (error) {
         console.log("Error in logOut");
         res.status(500).json({ error: "Internal server error" })
+    }
+
+}
+
+export const updateProfile = async (req, res) => {
+
+    try {
+        const id = req.params.id
+        const LogInUserId = req.user._id
+        const { img } = req.body
+
+        if (LogInUserId == id) {
+
+            const user = await User.findById({ _id: id })
+
+
+            if (!user) {
+                return res.status(400).json({ error: "User not found" })
+            }
+
+            if (img) {
+                if (user.profilePic) {
+                    await cloudinary.uploader.destroy(user.profilePic.split("/").pop().split(".")[0])
+                }
+                const uploadedResponse = await cloudinary.uploader.upload(img)
+                const profilePic = uploadedResponse.secure_url
+                console.log(profilePic);
+
+                user.profilePic = profilePic || user.profilePic
+
+                await user.save()
+
+                res.status(200).json(user)
+            }
+        }
+
+    } catch (error) {
+        console.log('Error in updateProfile', error.message);
+        res.status(500).json({ error: "Internal server error" })
+
     }
 
 }

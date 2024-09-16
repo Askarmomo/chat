@@ -1,9 +1,10 @@
 import express from "express";
-import { getAllUser } from "../controllers/allUserController.js";
+import { getAllUser, getOneUser } from "../controllers/allUserController.js";
 import { protuctRoute } from "../middleware/protuctRoute.js";
 
 const allUsersRoute = express.Router()
 
-allUsersRoute.get('/',protuctRoute,getAllUser)
+allUsersRoute.get('/', protuctRoute, getAllUser)
+allUsersRoute.get('/:id', protuctRoute, getOneUser)
 
 export default allUsersRoute
