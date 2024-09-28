@@ -1,8 +1,18 @@
-Chat-App
+#  Chat-App 
 
-includes technology's
-1.React.
-2.Tailwind css
-3.express js,
-4.node js,
-5.toast
+## Includes Technology's
+* React
+* Tailwind css
+* express js,
+* node js,
+* toast
+  
+## functionality's
+* User Login & SingUp
+* Follow And Unfollow
+* Create Post
+* Like to Post
+* User and others Profiles
+
+#### Note :- i want to make some improvements 
+
